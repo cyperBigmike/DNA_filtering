@@ -1,10 +1,10 @@
 ############### HELPER FUNCTIONS ###############
-input_path = "/home/seraj/DNAproj/Pilot-Nitsan/seq.txt"
+input_path = "/home/seraj/DNAproj/Omer-Pilot-Dataset/allseqmerged.fastq"
 output_path = "/home/seraj/DNAproj/output/removeprimers_and_rev_com_primers/reads_filter_without_primers_rev_com.fastq" 
 output_path_primers = "/home/seraj/DNAproj/output/removeprimers_and_rev_com_primers/reads_filter_with_primers_rev_com.fastq"
 front_primer = "TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG"
 back_primer = "CTGTCTCTTATACACATCTCCGAGCCCACGAGAC"
-datalen = 140
+DATALEN = 140
 # front_primer ="TAAGAGACAG"
 # back_primer = "CTGTCTCTTA"
 
@@ -152,6 +152,35 @@ def find_alone():
     for line in lines:
         front_ind = line.find(front_primer)
         back_ind = line.find(back_primer)
+
+        if front_ind != -1 and back_ind != -1:
+            seq_with_primers = line[front_ind:back_ind + len(back_primer)]
+            seq_without_primers = line[front_ind + len(front_primer): back_ind]
+            
+            if abs(len(seq_without_primers) - 140) <=5: # we take data in offset 5 at most ,else throw it.
+                file_output_with_primers.write(seq_with_primers + "\n")
+                file_output_without_primers.write(seq_without_primers + "\n")
+
+    file_input_fastq.close()
+    file_output_with_primers.close()
+    file_output_without_primers.close()
+
+
+def find_alone_onePrimer():
+    file_input_fastq =open(input_path, "r")
+    file_output_with_primers = open(output_path_primers, "w")
+    file_output_without_primers = open(output_path, "w")
+    lines = file_input_fastq.readlines() # is this ok with big files?
+    for line in lines:
+        front_ind = line.find(front_primer)
+        back_ind = line.find(back_primer)
+
+        # if we succeeded to find only one of the primers, calculate the possible position of the other
+        if front_ind != -1 and back_ind == -1:
+            back_ind = front_ind + len(front_primer) + DATALEN
+        
+        elif front_ind == -1 and back_ind != -1:
+            front_ind = back_ind - DATALEN - len(front_primer)
 
         if front_ind != -1 and back_ind != -1:
             seq_with_primers = line[front_ind:back_ind + len(back_primer)]
@@ -418,7 +447,7 @@ def find_comp_rev_aproxemationED():
     #_______________________________________________________#
         if front_ind == -1:
             # if couldn't find, search for primers with ~ED <= 5
-            for i in range(len(line) - datalen - len(back_primer) - len(front_primer) + 5) :
+            for i in range(len(line) - DATALEN - len(back_primer) - len(front_primer) + 5) :
                 if aproxemationED(line[i : i + len(front_primer)], front_primer) < 6:
                     front_ind = i
         if back_ind == -1 and front_ind != -1:
@@ -467,7 +496,7 @@ def find_comp_rev_aproxemationED_adapt():
     # TODO: Needs tuning maybe we can reach more accuracy
         if front_ind == -1:
             # if couldn't find, search for primers with ~ED <= 5
-            for i in range(len(line) - datalen - len(back_primer) - len(front_primer) + 5) :
+            for i in range(len(line) - DATALEN - len(back_primer) - len(front_primer) + 5) :
                 if aproxemationED_adapt(line[i : i + len(front_primer)], front_primer, True) < 6:
                     front_ind = i
         if back_ind == -1 and front_ind != -1:
@@ -506,7 +535,8 @@ def find_comp_rev_aproxemationED_adapt():
 ###############  MAIN FUNCTION   ###############
 
 
-find_alone()
+# find_alone()
+find_alone_onePrimer()
 # find_rev() 
 # find_comp()
 # find_comp_rev() 
@@ -514,4 +544,4 @@ find_alone()
 # find_ED()
 # find_comp_rev_oneED()
 # find_comp_rev_aproxemationED()
-find_comp_rev_aproxemationED_adapt() 
+# find_comp_rev_aproxemationED_adapt() 

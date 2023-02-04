@@ -1,3 +1,4 @@
+ED_approx_bound = 7
 
 def copy_reverse(cp):
     return (cp[::-1])
@@ -87,11 +88,11 @@ def check_ED(line, front_ind, back_ind, front_ball, back_ball):
                 break    
     return [front_ind, back_ind]
 
+
+# considering the size diff as insertions, and the diff between the remainings as substitution
 def aproxemationED(string1, string2):
     if len(string1) > len(string2):
         difference = len(string1) - len(string2)
-        # TODO: maybe it's better to consider the insertion happens in the front of
-        # the front primer not at the end 
         string1[:difference]
 
     elif len(string2) > len(string1):
@@ -168,11 +169,11 @@ def filter_3(file_input_fastq, file_output_with_primers, file_output_without_pri
         if front_ind == -1:
             # if couldn't find, search for primers with ~ED <= 5
             for i in range(len(line) - datalen - len(back_primer) - len(front_primer) + 5) :
-                if aproxemationED(line[i : i + len(front_primer)], front_primer) < 6:
+                if aproxemationED(line[i : i + len(front_primer)], front_primer) < ED_approx_bound:
                     front_ind = i
         if back_ind == -1 and front_ind != -1:
             for i in range(front_ind + 130, front_ind + 150):
-                if aproxemationED(line[i : i + len(back_primer)], back_primer) < 6:
+                if aproxemationED(line[i : i + len(back_primer)], back_primer) < ED_approx_bound:
                     back_ind = i
         
         # if couldn't find, search for complementary
@@ -236,6 +237,32 @@ def filter_4(file_input_fastq, file_output_with_primers, file_output_without_pri
             if abs(len(seq_without_primers) - datalen) <=5: # we take data in offset 5 at most ,else throw it.
                 file_output_with_primers.write(seq_with_primers + "\n")
                 file_output_without_primers.write(seq_without_primers + "\n")
+
+
+# DEPTH = 4  find_alone_onePrimer()
+def filter_5(file_input_fastq, file_output_with_primers, file_output_without_primers,
+             front_primer, back_primer, datalen):
+    print("With this filter you might get more and faster reads, however, the accuracy is bad")
+    lines = file_input_fastq.readlines()
+    for line in lines:
+        front_ind = line.find(front_primer)
+        back_ind = line.find(back_primer)
+
+        # if we succeeded to find only one of the primers, calculate the possible position of the other
+        if front_ind != -1 and back_ind == -1:
+            back_ind = front_ind + len(front_primer) + datalen
+        
+        elif front_ind == -1 and back_ind != -1:
+            front_ind = back_ind - datalen - len(front_primer)
+
+        if front_ind != -1 and back_ind != -1:
+            seq_with_primers = line[front_ind:back_ind + len(back_primer)]
+            seq_without_primers = line[front_ind + len(front_primer): back_ind]
+            
+            if abs(len(seq_without_primers) - 140) <=5: # we take data in offset 5 at most ,else throw it.
+                file_output_with_primers.write(seq_with_primers + "\n")
+                file_output_without_primers.write(seq_without_primers + "\n")
+
 
 
 
