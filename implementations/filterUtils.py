@@ -124,7 +124,7 @@ def filter_1(file_input_fastq, file_output_with_primers, file_output_without_pri
             seq_with_primers = line[front_ind:back_ind + len(back_primer)]
             seq_without_primers = line[front_ind + len(front_primer): back_ind]
             
-            if abs(len(seq_without_primers) - datalen) <=5: # we take data in offset 5 at most ,else throw it.
+            if abs(len(seq_without_primers) - datalen) <= 10: # we take data in offset 5 at most ,else throw it.
                 file_output_with_primers.write(seq_with_primers + "\n")
                 file_output_without_primers.write(seq_without_primers + "\n")
 

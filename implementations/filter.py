@@ -1,6 +1,6 @@
 import filterUtils
 
-input_path = "/home/seraj/DNAproj/Omer-Pilot-Dataset/allseqmerged.fastq"
+input_path = "/home/seraj/DNAproj/Pilot-Nitsan/seq.txt"
 output_path = "/home/seraj/DNAproj/output/removeprimers_and_rev_com_primers/reads_filter_without_primers_rev_com.fastq" 
 output_path_primers = "/home/seraj/DNAproj/output/removeprimers_and_rev_com_primers/reads_filter_with_primers_rev_com.fastq"
 front_primer = "TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG"
@@ -11,7 +11,7 @@ file_output_with_primers = open(output_path_primers, "w")
 file_output_without_primers = open(output_path, "w")
 
 datalen = 140
-DEPTH = 3
+DEPTH = 1
 
 filters = {
     1 : filterUtils.filter_1,

@@ -166,6 +166,44 @@ def find_alone():
     file_output_without_primers.close()
 
 
+# find half the primer 
+def find_alone_HP():
+    file_input_fastq =open(input_path, "r")
+    file_output_with_primers = open(output_path_primers, "w")
+    file_output_without_primers = open(output_path, "w")
+    lines = file_input_fastq.readlines() # is this ok with big files?
+    for line in lines:
+        front_ind = line.find(front_primer)
+        back_ind = line.find(back_primer)
+        
+        if front_ind == -1:
+            first_HP = front_primer[ : len(front_primer)//2]
+            front_ind = line.find(first_HP)
+        if front_ind ==-1:
+            second_HP = front_primer[len(front_primer)//2 : ]
+            front_ind = line.find(second_HP) - len(front_primer)//2 + 1
+        
+        if back_ind == -1:
+            first_HP = back_primer[ : len(back_primer)//2]
+            back_ind = line.find(first_HP)
+        if back_ind ==-1:
+            second_HP = back_primer[len(back_primer)//2 : ]
+            back_ind = line.find(second_HP) - len(back_primer)//2 + 1
+
+
+        if front_ind != -1 and back_ind != -1:
+            seq_with_primers = line[front_ind:back_ind + len(back_primer)]
+            seq_without_primers = line[front_ind + len(front_primer): back_ind]
+            
+            if abs(len(seq_without_primers) - 140) <=5: # we take data in offset 5 at most ,else throw it.
+                file_output_with_primers.write(seq_with_primers + "\n")
+                file_output_without_primers.write(seq_without_primers + "\n")
+
+    file_input_fastq.close()
+    file_output_with_primers.close()
+    file_output_without_primers.close()
+
+
 def find_alone_onePrimer():
     file_input_fastq =open(input_path, "r")
     file_output_with_primers = open(output_path_primers, "w")
@@ -536,7 +574,8 @@ def find_comp_rev_aproxemationED_adapt():
 
 
 # find_alone()
-find_alone_onePrimer()
+find_alone_HP()
+# find_alone_onePrimer()
 # find_rev() 
 # find_comp()
 # find_comp_rev() 
