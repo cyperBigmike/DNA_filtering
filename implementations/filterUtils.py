@@ -206,10 +206,6 @@ def filter_3(lines, file_output_with_primers, file_output_without_primers,
             front_ind = line_rev_com.find(front_primer)
             back_ind = line_rev_com.find(back_primer)
             line = line_rev_com
-            # if front_ind == -1 or back_ind == -1:
-            #     indices = check_ED(line, front_ind, back_ind, front_ball, back_ball)
-            #     front_ind = indices[0]
-            #     back_ind = indices[1]
     #_______________________________________________________#
 
         if front_ind != -1 and back_ind != -1:
@@ -347,6 +343,18 @@ def filter_7(lines, file_output_with_primers, file_output_without_primers,
         indices = findSubPrimer(line, front_primer, back_primer, front_ind, back_ind)
         front_ind = indices[0]
         back_ind = indices[1]
+
+        # if couldn't find, search for complementary
+        if front_ind == -1 or back_ind == -1:
+            line_com = copy_compliment(line)
+            line_rev_com = copy_reverse(line_com)
+            front_ind = line_rev_com.find(front_primer)
+            back_ind = line_rev_com.find(back_primer)
+            line = line_rev_com
+
+        # indices = findSubPrimer(line, front_primer, back_primer, front_ind, back_ind)
+        # front_ind = indices[0]
+        # back_ind = indices[1]
 
         if front_ind != -1 and back_ind != -1:
             seq_with_primers = line[front_ind:back_ind + len(back_primer)]

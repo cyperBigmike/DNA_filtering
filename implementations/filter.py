@@ -3,7 +3,7 @@ import filterUtils
 datalen = 140
 DEPTH = int(input("Which filtering depth between 1-7 is needed? \n"))
 
-if True :
+if False :
     input_path = "../../Omer-Pilot-Dataset/Design/allseqmerged.fastq"
     output_path = "../../Omer-Pilot-Dataset/output/removeprimers_and_rev_com_primers/reads_filter_without_primers_rev_com_" + str(DEPTH) + ".fastq" 
     output_path_primers = "../../Omer-Pilot-Dataset/output/removeprimers_and_rev_com_primers/reads_filter_with_primers_rev_com_" + str(DEPTH) + ".fastq"
