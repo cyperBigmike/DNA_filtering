@@ -1,7 +1,7 @@
 import filterUtils
 
 datalen = 140
-DEPTH = int(input("Which filtering depth between 1-6 is needed? \n"))
+DEPTH = int(input("Which filtering depth between 1-7 is needed? \n"))
 
 if True :
     input_path = "../../Omer-Pilot-Dataset/Design/allseqmerged.fastq"
@@ -27,7 +27,8 @@ filters = {
     3 : filterUtils.filter_3,
     4 : filterUtils.filter_4,
     5 : filterUtils.filter_5,
-    6 : filterUtils.filter_6
+    6 : filterUtils.filter_6,
+    7 : filterUtils.filter_7
 }
 
 filters.get(DEPTH, filterUtils.noFilter)(lines, file_output_with_primers, file_output_without_primers,
