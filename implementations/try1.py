@@ -1,7 +1,7 @@
 ############### HELPER FUNCTIONS ###############
-input_path = "/home/seraj/DNAproj/Omer-Pilot-Dataset/allseqmerged.fastq"
-output_path = "/home/seraj/DNAproj/output/removeprimers_and_rev_com_primers/reads_filter_without_primers_rev_com.fastq" 
-output_path_primers = "/home/seraj/DNAproj/output/removeprimers_and_rev_com_primers/reads_filter_with_primers_rev_com.fastq"
+input_path = "../../Omer-Pilot-Dataset/Design/allseqmerged.fastq"
+output_path = "../../Omer-Pilot-Dataset/output/TRY1.fastq" 
+output_path_primers = "../../Omer-Pilot-Dataset/output/TRY1_primers.fastq"
 front_primer = "TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG"
 back_primer = "CTGTCTCTTATACACATCTCCGAGCCCACGAGAC"
 DATALEN = 140
@@ -574,13 +574,13 @@ def find_comp_rev_aproxemationED_adapt():
 
 
 # find_alone()
-find_alone_HP()
+# find_alone_HP()
 # find_alone_onePrimer()
 # find_rev() 
 # find_comp()
 # find_comp_rev() 
 # find_comp_rev_OMER()
 # find_ED()
-# find_comp_rev_oneED()
+find_comp_rev_oneED()
 # find_comp_rev_aproxemationED()
 # find_comp_rev_aproxemationED_adapt() 
