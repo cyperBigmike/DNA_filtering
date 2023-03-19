@@ -1,6 +1,8 @@
 import filterUtils
+import sys
 
 datalen = 140
+# DEPTH = int(sys.argv[1])
 DEPTH = int(input("Which filtering depth between 1-8 is needed?\n"))
 
 if True :

@@ -109,7 +109,7 @@ def aproxemationED(string1, string2):
             difference += 1
     return difference
 
-
+#  more like hamming
 def findAproxematePrimers(line, front_primer, back_primer, front_ind, back_ind, dataLen):
     if front_ind == -1:
         # if couldn't find, search for primers with ~ED <= 6 choosed after tuning
@@ -157,7 +157,7 @@ def findSubPrimer(line, front_primer, back_primer, front_ind, back_ind):
 def filter_1(lines, file_output_with_primers, file_output_without_primers,
              front_primer, back_primer, dataLen):
 
-    for line in lines:
+    for line in tqdm(lines):
         front_ind = line.find(front_primer)
         back_ind = line.find(back_primer)
 
@@ -174,7 +174,7 @@ def filter_1(lines, file_output_with_primers, file_output_without_primers,
 def filter_2(lines, file_output_with_primers, file_output_without_primers,
              front_primer, back_primer, dataLen):
 
-    for line in lines:
+    for line in tqdm(lines):
         front_ind = line.find(front_primer)
         back_ind = line.find(back_primer)
 
@@ -240,7 +240,7 @@ def filter_4(lines, file_output_with_primers, file_output_without_primers,
     front_ball = [front_del_ball,front_ins_ball, front_sub_ball]
     back_ball = [back_del_ball, back_ins_ball, back_sub_ball]
 
-    for line in lines:
+    for line in tqdm(lines):
         front_ind = line.find(front_primer)
         back_ind = line.find(back_primer)
     #_______________________________________________________#
@@ -394,9 +394,20 @@ def filter_8(lines, file_output_with_primers, file_output_without_primers,
              front_primer, back_primer, dataLen):
     print("With this filter you might get more and faster reads, however, the accuracy is bad")
 
-    for line in lines:
+    for line in tqdm(lines):
         front_ind = line.find(front_primer)
         back_ind = line.find(back_primer)
+
+        # if couldn't find, search for reversed complementary
+        if front_ind == -1 or back_ind == -1:
+            line_com = copy_compliment(line)
+            line_rev_com = copy_reverse(line_com)
+            tmp_front_ind = line_rev_com.find(front_primer)
+            tmp_back_ind = line_rev_com.find(back_primer)
+            if tmp_front_ind != -1 and tmp_back_ind != -1:
+                front_ind = tmp_front_ind
+                back_ind = tmp_back_ind
+                line = line_rev_com
 
         # if we succeeded to find only one of the primers, calculate the possible position of the other
         if front_ind != -1 and back_ind == -1:
