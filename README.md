@@ -20,14 +20,10 @@ filtering DNA sequences , filters levels :
 
 
 **Usage - 
-you need to provide the input file path and what filter level you want to use like this  : 
+you need to provide the input & output file path in filters.py   : 
 
-' python3.6 filter.py  input.fastq 1 '
+' python3.6 filter.py '
 
 **output - 
 
-you will get the output files in the current directory like this :
-
-    reads_filter_without_primers_rev_com_1.fastq
-    
-    reads_filter_with_primers_rev_com_ 1.fastq
+you will get the output files where you spececified. 
